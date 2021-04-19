@@ -2,21 +2,24 @@ import React, { useContext } from "react";
 import Product from "./Product";
 import ProductContext from "./productContext";
 
-function ProductList() {
+function ProductList({title, type}) {
   const state = useContext(ProductContext);
+  const products = type === "cart" ? state.cartProducts : state.allProducts;
 
   return (
     <div>
-      <h2>Total items in cart: {state.cartProducts.length}</h2>
+      <h1>{title}</h1>
+      <h2>Total items in cart: {state.cartProducts.reduce((acc, cur) => acc + cur.quantity, 0)}</h2>
       <ul>
-        {state.allProducts.map((p) => (
+        {products.map((p) => (
           <li key={p.id}>
-            <Product {...p} />
+            <Product product={p} />
           </li>
         ))}
       </ul>
     </div>
   );
 }
+
 
 export default ProductList;

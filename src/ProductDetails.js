@@ -1,10 +1,14 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useParams } from "react-router";
 import DispatchContext from "./dispatchContext";
+import ProductContext from "./productContext";
 
-function Product({ product }) {
-  const { name, price, id, quantity } = product;
+function ProductDetails() {
+  const { id } = useParams();
+  const state = useContext(ProductContext);
   const dispatch = useContext(DispatchContext);
+  const product = state.allProducts.find(p => p.id === id);
+  const { name, price, description, image_url } = product;
 
   function addToCart() {
     dispatch({
@@ -21,18 +25,16 @@ function Product({ product }) {
       id
     });
   }
-
   return (
     <div>
-      <Link to={`/product/${id}`}>
-        <p>{name}</p>
-      </Link>
+      <p>{name}</p>
       <p>{price}</p>
-      {quantity && <p>Quantity: {quantity}</p>}
+      <p>{description}</p>
+      <img style={{ maxWidth: "300px" }} src={image_url} />
       <button onClick={addToCart}>Add to Cart</button>
       <button onClick={removeFromCart}>Remove from Cart</button>
     </div>
   );
 }
 
-export default Product;
+export default ProductDetails;
